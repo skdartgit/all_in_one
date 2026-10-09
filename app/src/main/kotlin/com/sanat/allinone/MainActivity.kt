@@ -2443,7 +2443,7 @@ class MainActivity : Activity() {
 
             details.addView(detailSection("User ID", a.user))
 
-            val passwordSection = LinearLayout(this).apply {
+            val passwordSection = LinearLayout(this@MainActivity).apply {
                 orientation = LinearLayout.VERTICAL
                 setPadding(dp(10), dp(8), dp(10), dp(8))
                 background = GradientDrawable().apply {
@@ -2460,7 +2460,7 @@ class MainActivity : Activity() {
                 textSize = 15f
                 setTypeface(Typeface.DEFAULT, Typeface.BOLD)
             }
-            val passwordLine = LinearLayout(this).apply {
+            val passwordLine = LinearLayout(this@MainActivity).apply {
                 orientation = LinearLayout.HORIZONTAL
                 gravity = Gravity.CENTER_VERTICAL
             }
