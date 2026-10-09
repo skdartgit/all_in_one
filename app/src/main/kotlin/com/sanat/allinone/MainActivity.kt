@@ -2486,10 +2486,12 @@ class MainActivity : Activity() {
             passwordSection.addView(passwordLine)
             details.addView(passwordSection)
 
-            val moreText = listOf(
-                a.other1.takeIf { it.isNotBlank() }?.let { "Other-1: $it" },
-                a.other2.takeIf { it.isNotBlank() }?.let { "Other-2: $it" }
-            ).filterNotNull().joinToString("\n").ifBlank { "—" }
+            // Display both legacy values together in one unified section.
+            // No "Other-1" or "Other-2" labels are shown.
+            val moreText = listOf(a.other1, a.other2)
+                .filter { it.isNotBlank() }
+                .joinToString("\n")
+                .ifBlank { "—" }
             details.addView(detailSection("More About Account", moreText))
 
             // Only the account title toggles the details; the edit button
@@ -2529,24 +2531,20 @@ class MainActivity : Activity() {
                 true
             )
 
-        val o1 =
-            edit(
-                "Other-1",
-                old?.other1 ?: ""
-            )
-
-        val o2 =
-            edit(
-                "Other-2",
-                old?.other2 ?: ""
-            )
+        // One editor field replaces the previous Other-1 and Other-2 fields.
+        // Existing account values are combined here so no saved information is lost.
+        val moreAbout = edit(
+            "More About Account",
+            listOf(old?.other1.orEmpty(), old?.other2.orEmpty())
+                .filter { it.isNotBlank() }
+                .joinToString("\n")
+        )
 
         listOf(
             n,
             u,
             p,
-            o1,
-            o2
+            moreAbout
         ).forEach {
             box.addView(it)
         }
@@ -2575,8 +2573,8 @@ class MainActivity : Activity() {
                                 },
                             u.text.toString(),
                             p.text.toString(),
-                            o1.text.toString(),
-                            o2.text.toString()
+                            moreAbout.text.toString(),
+                            ""
                         )
                     )
 
@@ -2592,10 +2590,10 @@ class MainActivity : Activity() {
                         p.text.toString()
 
                     old.other1 =
-                        o1.text.toString()
+                        moreAbout.text.toString()
 
                     old.other2 =
-                        o2.text.toString()
+                        ""
 
                     val idx =
                         l.indexOfFirst {
